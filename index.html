@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FC 27 Card Clash</title>
+<style>
+:root{--bg:#08111f;--panel:#111e31;--panel2:#182941;--ink:#f4f7fb;--muted:#9fb0c7;--gold:#f3c969;--green:#67e0ad;--line:#2a3b54;--red:#ff7e86}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#193353 0,#08111f 42%);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:24px max(18px,calc((100% - 1180px)/2));border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.brand{font-weight:900;letter-spacing:.04em;font-size:22px}.brand span{color:var(--gold)}.wallet{background:#1d3049;padding:9px 14px;border:1px solid var(--line);border-radius:999px;font-weight:800}
+main{max-width:1180px;margin:auto;padding:22px 18px 60px}.notice{background:#172941;border:1px solid #34506e;padding:12px 15px;border-radius:12px;color:#c9d8e9;margin-bottom:18px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab,button,.filelabel{border:1px solid var(--line);background:#1b2d45;color:var(--ink);padding:10px 14px;border-radius:10px;font-weight:750;cursor:pointer}.tab.active,button.primary{background:var(--gold);color:#172033;border-color:var(--gold)}button:hover,.filelabel:hover{filter:brightness(1.1)}button:disabled{opacity:.4;cursor:not-allowed}
+.panel{background:linear-gradient(145deg,#14243a,#0f1b2c);border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 10px 30px #0002}
+h1,h2,h3{margin:0 0 12px}h1{font-size:clamp(25px,4vw,38px)}h2{font-size:21px}.muted{color:var(--muted)}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.space{justify-content:space-between}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
+.card{position:relative;min-height:245px;border-radius:14px;padding:12px;color:#182033;background:linear-gradient(160deg,#f8e7b8,#d3aa56 65%,#9b7131);box-shadow:0 8px 20px #0005;display:flex;flex-direction:column;justify-content:space-between;border:2px solid #f9e3a2;overflow:hidden}
+.card.silver{background:linear-gradient(160deg,#f1f4f8,#9aa8ba 70%,#64748b);border-color:#e4edf7}.card.bronze{background:linear-gradient(160deg,#f4d2ae,#b87945 70%,#7c4529);border-color:#f0c49d}.card.elite{background:linear-gradient(160deg,#e5d5ff,#9474d6 60%,#49357f);border-color:#d6c4ff;color:#fff}
+.cardtop{display:flex;justify-content:space-between;font-weight:900}.ovr{font-size:34px;line-height:1}.pos{font-size:12px;font-weight:900}.avatar{height:88px;display:grid;place-items:center;font-size:47px;opacity:.8;text-shadow:0 2px 5px #fff8}.pname{font-weight:950;font-size:17px;line-height:1.1}.club{font-size:11px;opacity:.8;margin-top:3px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;font-size:11px;font-weight:850;margin-top:8px}.stat{text-align:center;background:#ffffff55;border-radius:5px;padding:3px}
+.metric{font-size:27px;font-weight:900;color:var(--gold)}.hidden{display:none!important}input,select{background:#091525;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px;max-width:100%}input[type=file]{display:none}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:12px;text-transform:uppercase}
+.slot{border:1px dashed #536781;border-radius:10px;padding:10px;min-height:58px;background:#0c1929}.slot select{width:100%}.log{background:#0a1625;padding:12px;border-radius:10px;max-height:240px;overflow:auto;white-space:pre-wrap}.pill{font-size:11px;border:1px solid #526982;border-radius:999px;padding:3px 7px;color:#c5d4e5}
+footer{color:var(--muted);text-align:center;padding:24px;font-size:12px}
+@media(max-width:600px){header{padding:16px}.card{min-height:220px}.grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="brand">FC 27 <span>CARD CLASH</span></div><div class="wallet">🪙 <span id="coins">1,000</span> coins</div></header>
+<main>
+<div class="notice"><b>Men's player card game.</b> This is a fan-made, offline-ready prototype. Demo cards are examples, not a verified complete EA database. Import an official player CSV to add the full set of real ratings.</div>
+<nav>
+<button class="tab active" data-tab="home">Home</button><button class="tab" data-tab="packs">Packs</button><button class="tab" data-tab="club">My Club</button><button class="tab" data-tab="squad">Squad</button><button class="tab" data-tab="battle">Battle</button><button class="tab" data-tab="market">Trading</button><button class="tab" data-tab="data">Database</button>
+</nav>
+<section id="home" class="view">
+<h1>Build your ultimate collection.</h1><p class="muted">Open packs, collect players, build an XI and take on generated opponents.</p>
+<div class="grid">
+<div class="panel"><div class="muted">Players in database</div><div class="metric" id="dbcount">0</div></div>
+<div class="panel"><div class="muted">Cards owned</div><div class="metric" id="ownedcount">0</div></div>
+<div class="panel"><div class="muted">Squad strength</div><div class="metric" id="squadstrength">—</div></div>
+<div class="panel"><div class="muted">Battles won</div><div class="metric" id="wins">0</div></div>
+</div>
+<div class="panel"><h2>Quick start</h2><div class="row"><button class="primary" onclick="showTab('packs')">Open a pack</button><button onclick="showTab('squad')">Build my squad</button><button onclick="showTab('data')">Import player database</button></div></div>
+<div class="panel"><h2>How to play</h2><ol><li>Open packs with coins to collect player cards.</li><li>Choose up to 11 owned players for your squad.</li><li>Battle a generated opponent; your squad rating and chemistry-free team strength determine the result.</li><li>Sell duplicates for coins or keep them for your collection.</li></ol></div>
+</section>
+<section id="packs" class="view hidden">
+<h1>Pack Store</h1><p class="muted">Each pack contains three random players. Better packs improve the minimum rarity.</p>
+<div class="grid">
+<div class="panel"><h2>Bronze Pack</h2><div class="metric">100</div><p class="muted">3 players · Bronze or better</p><button class="primary" onclick="openPack(100,'bronze')">Open pack</button></div>
+<div class="panel"><h2>Gold Pack</h2><div class="metric">350</div><p class="muted">3 players · Silver or better, chance of Elite</p><button class="primary" onclick="openPack(350,'gold')">Open pack</button></div>
+<div class="panel"><h2>Elite Pack</h2><div class="metric">800</div><p class="muted">3 players · Gold or better, better Elite chance</p><button class="primary" onclick="openPack(800,'elite')">Open pack</button></div>
+</div><div id="packresult" class="panel hidden"><h2>Your pack</h2><div id="packcards" class="grid"></div></div>
+</section>
+<section id="club" class="view hidden">
+<div class="row space"><div><h1>My Club</h1><p class="muted">Your collected player cards.</p></div><input id="clubsearch" placeholder="Search player or club…" oninput="renderClub()"></div>
+<div class="row"><select id="clubfilter" onchange="renderClub()"><option value="">All rarities</option><option>Bronze</option><option>Silver</option><option>Gold</option><option>Elite</option></select><span class="pill" id="clubtotal"></span></div>
+<div id="clubcards" class="grid" style="margin-top:14px"></div>
+</section>
+<section id="squad" class="view hidden">
+<h1>My Starting XI</h1><p class="muted">Select up to 11 cards you own. Positions are flexible in this prototype.</p>
+<div class="row"><button class="primary" onclick="autoSquad()">Auto-pick best XI</button><button onclick="clearSquad()">Clear squad</button></div>
+<div id="squadslots" class="grid" style="margin-top:14px"></div><div class="panel"><div class="row space"><b>Team strength</b><span class="metric" id="teamovr">—</span></div><p class="muted" id="teamdetail">Add players to your squad.</p></div>
+</section>
+<section id="battle" class="view hidden">
+<h1>Squad Battle</h1><p class="muted">Challenge a randomly generated opponent. Your squad needs at least one player.</p>
+<div class="panel"><div class="row space"><div><h2>Your team</h2><div class="metric" id="yourpower">—</div></div><div style="font-size:30px">⚔️</div><div><h2>Opponent</h2><div class="metric" id="oppower">—</div></div></div><button class="primary" onclick="battle()">Start battle</button><div id="battleresult" class="log" style="margin-top:14px">Battle results will appear here.</div></div>
+</section>
+<section id="market" class="view hidden">
+<h1>Trading Post</h1><p class="muted">Sell cards from your club for coins. Keep at least one copy of a player if you want to use them in your squad.</p>
+<div id="marketlist" class="tablewrap"></div>
+</section>
+<section id="data" class="view hidden">
+<h1>Player Database</h1><p class="muted">Import a CSV to add or update players. Recommended columns: name,club,nation,position,overall,pace,shooting,passing,dribbling,defending,physical. Existing players with the same name and club are updated.</p>
+<div class="panel"><div class="row"><label class="filelabel" for="csvfile">Choose player CSV</label><input id="csvfile" type="file" accept=".csv,text/csv" onchange="importCSV(event)"><button onclick="downloadTemplate()">Download CSV template</button><button onclick="exportCSV()">Export database</button></div><p id="importstatus" class="muted">No file imported yet.</p></div>
+<div class="panel"><h2>Database preview</h2><input id="dbsearch" placeholder="Search all players…" oninput="renderDatabase()"><div id="dbtable" class="tablewrap" style="margin-top:12px"></div></div>
+</section>
+</main>
+<footer>Unofficial fan-made project. Not affiliated with or endorsed by EA SPORTS or Electronic Arts. Player names and ratings are for personal gameplay; verify ratings against official EA sources.</footer>
+<script>
+const demo=[
+["Kylian Mbappé","Real Madrid","France","ST",91,97,90,80,92,36,78],
+["Erling Haaland","Manchester City","Norway","ST",91,88,92,70,81,45,88],
+["Lamine Yamal","FC Barcelona","Spain","RW",90,90,82,85,94,25,62],
+["Harry Kane","Bayern Munich","England","ST",90,65,93,84,85,49,83],
+["Ousmane Dembélé","Paris Saint-Germain","France","RW",90,95,82,84,93,40,65],
+["Rodri","Manchester City","Spain","CDM",90,66,80,87,84,87,85],
+["Jude Bellingham","Real Madrid","England","CAM",90,80,86,84,90,78,83],
+["Pedri","FC Barcelona","Spain","CM",90,78,72,88,91,75,68],
+["Vitinha","Paris Saint-Germain","Portugal","CM",90,75,74,89,89,78,70],
+["Virgil van Dijk","Liverpool","Netherlands","CB",88,75,60,71,72,90,86],
+["Mohamed Salah","Liverpool","Egypt","RW",87,89,87,82,88,45,76],
+["Bukayo Saka","Arsenal","England","RW",87,85,82,82,88,55,70],
+["Alisson","Liverpool","Brazil","GK",89,86,85,90,89,56,91],
+["Kevin De Bruyne","Manchester City","Belgium","CM",87,67,86,94,87,65,78],
+["Rúben Dias","Manchester City","Portugal","CB",87,62,48,68,68,89,88],
+["Cole Palmer","Chelsea","England","CAM",86,78,86,85,87,52,68],
+["Son Heung-min","Tottenham Hotspur","South Korea","LW",86,88,87,82,86,43,70],
+["Lautaro Martínez","Inter","Argentina","ST",87,83,88,73,87,50,85],
+["Federico Valverde","Real Madrid","Uruguay","CM",88,91,82,84,84,83,88],
+["Jamal Musiala","Bayern Munich","Germany","CAM",88,84,81,82,93,62,67]
+].map(a=>({name:a[0],club:a[1],nation:a[2],position:a[3],overall:Number(a[4]),pace:Number(a[5]),shooting:Number(a[6]),passing:Number(a[7]),dribbling:Number(a[8]),defending:Number(a[9]),physical:Number(a[10]),demo:true}));
+const state=load();
+function load(){try{return JSON.parse(localStorage.getItem('fc27cc'))||{players:demo,owned:[],squad:[],coins:1000,wins:0}}catch(e){return{players:demo,owned:[],squad:[],coins:1000,wins:0}}}
+function save(){localStorage.setItem('fc27cc',JSON.stringify(state));refresh()}
+function rarity(o){return o>=90?'Elite':o>=75?'Gold':o>=65?'Silver':'Bronze'}
+function cls(o){return rarity(o).toLowerCase()}
+function uid(){return Math.random().toString(36).slice(2,10)}
+function cardHTML(p,ownedId=''){let o=Number(p.overall)||0;return `<div class="card ${cls(o)}"><div class="cardtop"><div><div class="ovr">${o}</div><div class="pos">${esc(p.position||'—')}</div></div><div style="text-align:right;font-size:12px;font-weight:900">${esc(p.nation||'')}</div></div><div class="avatar">⚽</div><div><div class="pname">${esc(p.name)}</div><div class="club">${esc(p.club||'Free Agent')} · ${rarity(o)}</div><div class="stats">${[['PAC',p.pace],['SHO',p.shooting],['PAS',p.passing],['DRI',p.dribbling],['DEF',p.defending],['PHY',p.physical]].map(x=>`<div class="stat">${x[0]} ${x[1]??'—'}</div>`).join('')}</div></div></div>`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showTab(id){document.querySelectorAll('.view').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='club')renderClub();if(id==='squad')renderSquad();if(id==='market')renderMarket();if(id==='data')renderDatabase()}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function refresh(){document.getElementById('coins').textContent=state.coins.toLocaleString();document.getElementById('dbcount').textContent=state.players.length.toLocaleString();document.getElementById('ownedcount').textContent=state.owned.length;document.getElementById('wins').textContent=state.wins;let s=state.squad.map(id=>state.owned.find(c=>c.id===id)).filter(Boolean);let avg=s.length?Math.round(s.reduce((a,c)=>a+c.player.overall,0)/s.length):0;document.getElementById('squadstrength').textContent=avg||'—';document.getElementById('teamovr').textContent=avg||'—';document.getElementById('teamdetail').textContent=`${s.length}/11 players selected`;document.getElementById('yourpower').textContent=avg||'—';document.getElementById('oppower').textContent=avg? 'Ready':'—'}
+function openPack(cost,type){if(state.coins<cost){alert('Not enough coins!');return}if(!state.players.length){alert('Import a player database first.');return}state.coins-=cost;let got=[];for(let i=0;i<3;i++){let pool=state.players.filter(p=>{let r=rarity(p.overall);if(type==='bronze')return true;if(type==='gold')return ['Silver','Gold','Elite'].includes(r);return ['Gold','Elite'].includes(r)});if(!pool.length)pool=state.players;let p=pool[Math.floor(Math.random()*pool.length)];let c={id:uid(),player:p};state.owned.push(c);got.push(c)}document.getElementById('packcards').innerHTML=got.map(c=>cardHTML(c.player)).join('');document.getElementById('packresult').classList.remove('hidden');save()}
+function renderClub(){let q=(document.getElementById('clubsearch').value||'').toLowerCase(),f=document.getElementById('clubfilter').value;let arr=state.owned.filter(c=>(c.player.name+' '+c.player.club).toLowerCase().includes(q)&&(!f||rarity(c.player.overall)===f));document.getElementById('clubtotal').textContent=arr.length+' cards';document.getElementById('clubcards').innerHTML=arr.map(c=>`<div>${cardHTML(c.player)}<button style="width:100%;margin-top:6px" onclick="sellCard('${c.id}')">Sell duplicate · ${sellValue(c.player)} coins</button></div>`).join('')||'<p class="muted">No cards match. Open a pack to get started.</p>'}
+function sellValue(p){return Math.max(10,Math.round(p.overall*3))}
+function sellCard(id){let c=state.owned.find(x=>x.id===id);if(!c)return;if(state.squad.includes(id)){alert('Remove this player from your squad before selling.');return}state.coins+=sellValue(c.player);state.owned=state.owned.filter(x=>x.id!==id);save();renderClub();renderMarket()}
+function renderSquad(){let slots=document.getElementById('squadslots');slots.innerHTML=Array.from({length:11},(_,i)=>{let id=state.squad[i]||'',c=state.owned.find(x=>x.id===id);return `<div class="slot"><b>${i+1}. ${['GK','DEF','DEF','DEF','DEF','MID','MID','MID','ATT','ATT','ATT'][i]}</b><select onchange="setSlot(${i},this.value)"><option value="">— Empty —</option>${state.owned.map(x=>`<option value="${x.id}" ${x.id===id?'selected':''}>${esc(x.player.name)} (${x.player.overall})</option>`).join('')}</select>${c?`<small class="muted">${esc(c.player.club)} · ${rarity(c.player.overall)}</small>`:''}</div>`}).join('');refresh()}
+function setSlot(i,id){if(id&&state.squad.some((x,j)=>x===id&&j!==i)){alert('A card can only occupy one squad position.');renderSquad();return}state.squad[i]=id||null;state.squad=state.squad.filter(Boolean);save();renderSquad()}
+function autoSquad(){state.squad=state.owned.slice().sort((a,b)=>b.player.overall-a.player.overall).slice(0,11).map(c=>c.id);save();renderSquad()}
+function clearSquad(){state.squad=[];save();renderSquad()}
+function battle(){let own=state.squad.map(id=>state.owned.find(c=>c.id===id)).filter(Boolean);if(!own.length){alert('Build your squad first.');return}let power=own.reduce((a,c)=>a+c.player.overall,0)/own.length;let opp=68+Math.random()*24;let diff=power-opp;let win=diff+ (Math.random()*12-6)>0;let reward=win?180:60;if(win)state.wins++;state.coins+=reward;document.getElementById('oppower').textContent=Math.round(opp);document.getElementById('battleresult').textContent=`Your team: ${power.toFixed(1)} OVR\\nOpponent: ${opp.toFixed(1)} OVR\\n\\n${win?'🏆 VICTORY!':'💥 DEFEAT'}\\nYou earned ${reward} coins.`;save()}
+function renderMarket(){let counts={};state.owned.forEach(c=>counts[c.player.name+'|'+c.player.club]=(counts[c.player.name+'|'+c.player.club]||0)+1);let rows=state.owned.map(c=>`<tr><td>${esc(c.player.name)}</td><td>${esc(c.player.club)}</td><td>${c.player.overall}</td><td>${rarity(c.player.overall)}</td><td><button onclick="sellCard('${c.id}')">Sell · ${sellValue(c.player)}</button></td></tr>`).join('');document.getElementById('marketlist').innerHTML=`<table><thead><tr><th>Player</th><th>Club</th><th>OVR</th><th>Rarity</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`||'<p class="muted">No cards to trade yet.</p>'}
+function renderDatabase(){let q=(document.getElementById('dbsearch')?.value||'').toLowerCase();let arr=state.players.filter(p=>(p.name+' '+p.club+' '+p.nation).toLowerCase().includes(q)).slice(0,300);document.getElementById('dbtable').innerHTML=`<table><thead><tr><th>Player</th><th>Club</th><th>Pos</th><th>OVR</th><th>Rarity</th></tr></thead><tbody>${arr.map(p=>`<tr><td>${esc(p.name)}${p.demo?' <span class="pill">demo</span>':''}</td><td>${esc(p.club)}</td><td>${esc(p.position)}</td><td>${p.overall}</td><td>${rarity(p.overall)}</td></tr>`).join('')}</tbody></table><p class="muted">Showing up to 300 matching players.</p>`}
+function importCSV(e){let file=e.target.files[0];if(!file)return;let reader=new FileReader();reader.onload=()=>{try{let rows=parseCSV(reader.result);let headers=rows.shift().map(x=>x.trim().toLowerCase());let get=(r,...keys)=>{let i=headers.findIndex(h=>keys.includes(h));return i>=0?r[i]||'':''};let count=0;rows.forEach(r=>{let name=get(r,'name','player','player name');if(!name)return;let p={name,club:get(r,'club','team'),nation:get(r,'nation','nationality','country'),position:get(r,'position','pos'),overall:Number(get(r,'overall','ovr','rating')),pace:Number(get(r,'pace','pac')),shooting:Number(get(r,'shooting','sho')),passing:Number(get(r,'passing','pas')),dribbling:Number(get(r,'dribbling','dri')),defending:Number(get(r,'defending','def','defence')),physical:Number(get(r,'physical','phy','physicality')),demo:false};if(!p.overall)return;let idx=state.players.findIndex(x=>x.name.toLowerCase()===name.toLowerCase()&&x.club.toLowerCase()===p.club.toLowerCase());if(idx>=0)state.players[idx]=p;else state.players.push(p);count++});save();document.getElementById('importstatus').textContent=`Imported/updated ${count} players. Database now has ${state.players.length} players.`;renderDatabase()}catch(err){document.getElementById('importstatus').textContent='Could not read CSV: '+err.message}};reader.readAsText(file)}
+function parseCSV(s){let out=[],row=[],v='',q=false;for(let i=0;i<s.length;i++){let c=s[i];if(c==='"'&&q&&s[i+1]==='"'){v+='"';i++}else if(c==='"')q=!q;else if(c===','&&!q){row.push(v);v=''}else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&s[i+1]==='\n')i++;row.push(v);if(row.some(x=>x!==''))out.push(row);row=[];v=''}else v+=c}row.push(v);if(row.some(x=>x!==''))out.push(row);return out}
+function downloadTemplate(){let csv='name,club,nation,position,overall,pace,shooting,passing,dribbling,defending,physical\\nExample Player,Example FC,Country,ST,75,80,74,70,78,40,72\\n';download('fc27-player-template.csv',csv)}
+function exportCSV(){let h='name,club,nation,position,overall,pace,shooting,passing,dribbling,defending,physical';let rows=state.players.map(p=>[p.name,p.club,p.nation,p.position,p.overall,p.pace,p.shooting,p.passing,p.dribbling,p.defending,p.physical].map(csvCell).join(','));download('fc27-player-database.csv',[h,...rows].join('\\n'))}
+function csvCell(x){return '"'+String(x??'').replace(/"/g,'""')+'"'}
+function download(name,content){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([content],{type:'text/csv'}));a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+refresh();renderDatabase();
+</script>
+</body></html>
